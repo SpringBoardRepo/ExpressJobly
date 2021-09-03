@@ -1,6 +1,13 @@
 const { BadRequestError } = require("../expressError");
 
-// THIS NEEDS SOME GREAT DOCUMENTATION.
+// Helper for Selective Update queires
+
+// The calling function is use to make a SET clause of an update SQL queires
+
+// @params dataToUpdate {fieldName : newVal,secondFieldname : newVal}
+// @params jsToSql { firstName :"first_name" , age :"age"}
+
+//returns { setCols , dataToUpdate }
 
 function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   const keys = Object.keys(dataToUpdate);
@@ -8,7 +15,7 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 
   // {firstName: 'Aliya', age: 32} => ['"first_name"=$1', '"age"=$2']
   const cols = keys.map((colName, idx) =>
-      `"${jsToSql[colName] || colName}"=$${idx + 1}`,
+    `"${jsToSql[colName] || colName}"=$${idx + 1}`,
   );
 
   return {
