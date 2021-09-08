@@ -7,11 +7,41 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 
 class Job {
 
-    // Get all jobs
-    static async getAll() {
+    /** Get all jobs
+     * 
+    */
+    static async getAll(search = {}) {
 
-        const result = await db.query(`SELECT * FROM jobs`);
-        return result.rows;
+        let query = `SELECT id,
+                        title, salary, equity,
+                        company_handle , c.name FROM jobs
+                        JOIN companies AS c on c.handle = jobs.company_handle`;
+
+        let { title, minSalary, hasEquity } = search;
+        let values = [];
+        let whereExpressions = [];
+
+        if (minSalary !== undefined) {
+            values.push(minSalary);
+            whereExpressions.push(`salary >= $${values.length}`);
+        }
+
+        if (title !== undefined) {
+            values.push(`%${title}%`);
+            whereExpressions.push(`title ILIKE $${values.length}`);
+        }
+
+        if (hasEquity) {
+            whereExpressions.push(`equity > 0`);
+        }
+
+        if (whereExpressions.length > 0) {
+            query += " WHERE " + whereExpressions.join(" AND ");
+        }
+        // Final Query
+        query = query + " ORDER BY title";
+        const q = await db.query(query, values);
+        return q.rows;
     }
 
     //Create a new Job

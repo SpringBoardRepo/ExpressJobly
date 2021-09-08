@@ -117,6 +117,7 @@ describe("GET /companies/:handle", function () {
       company: {
         handle: "c1",
         name: "C1",
+        jobs: expect.any(Array),
         description: "Desc1",
         numEmployees: 1,
         logoUrl: "http://c1.img",
@@ -130,6 +131,7 @@ describe("GET /companies/:handle", function () {
       company: {
         handle: "c2",
         name: "C2",
+        jobs: expect.any(Array),
         description: "Desc2",
         numEmployees: 2,
         logoUrl: "http://c2.img",

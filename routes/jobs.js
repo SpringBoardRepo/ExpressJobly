@@ -10,16 +10,26 @@ const jobUpdateSchema = require("../schemas/jobUpdate.json");
 
 const router = new express.Router();
 
-/* GET / => { "jobs":[{"id": 1,"title": 
-                 "Conservator, furniture", 
-                  "salary": 110000,
-                   "equity": "0",
-                    "company_handle": "watson-davis"}
-]}*/
-router.get("/", async (req, res) => {
+/* GET / => { "jobs":[{"id","title",  "salary","equity",
+                    "company_handle"}]}
+      
+     Can Filter by title (will find case-insensitive, partial matches)
+     *  minSalary, hasEquity
+     *
+     * Authorization required : none
+*/
+router.get("/", async (req, res, next) => {
 
-    const jobs = await Job.getAll();
-    return res.json({ jobs: jobs });
+    const q = req.query;
+    if (q.minSalary !== undefined) q.minSalary = +q.minSalary;
+    q.hasEquity = q.hasEquity === "true";
+    try {
+        const jobs = await Job.getAll(q);
+        return res.json({ jobs });
+    } catch (error) {
+        return next(error);
+    }
+
 })
 
 /* GET /jobs/:id 
