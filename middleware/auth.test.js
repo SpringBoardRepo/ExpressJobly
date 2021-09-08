@@ -16,9 +16,10 @@ const badJwt = jwt.sign({ username: "test", isAdmin: false }, "wrong");
 describe("authenticateJWT", function () {
   test("works: via header", function () {
     expect.assertions(2);
-     //there are multiple ways to pass an authorization token, this is how you pass it in the header.
-    //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
-    const req = { headers: { authorization: `Bearer ${testJwt}` } };
+    //there are multiple ways to pass an authorization token, this is how you pass it in the header.
+    //this has been provided to show you another way to pass the token.
+    // you are only expected to read this code for this project.
+    const req = { headers: { token: testJwt } };
     const res = { locals: {} };
     const next = function (err) {
       expect(err).toBeFalsy();
@@ -46,7 +47,7 @@ describe("authenticateJWT", function () {
 
   test("works: invalid token", function () {
     expect.assertions(2);
-    const req = { headers: { authorization: `Bearer ${badJwt}` } };
+    const req = { headers: { token: badJwt } };
     const res = { locals: {} };
     const next = function (err) {
       expect(err).toBeFalsy();
