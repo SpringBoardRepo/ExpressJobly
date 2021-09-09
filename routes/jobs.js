@@ -91,11 +91,11 @@ router.patch('/:id', ensureAdmin, async (req, res, next) => {
             throw new BadRequestError(errs);
         }
 
-        const company = await Job.update(req.params.id, req.body);
+        const jobs = await Job.update(req.params.id, req.body);
         return res.json({ job });
 
     } catch (error) {
-        return next(err);
+        return next(error);
     }
 })
 /**DELETE a job by id
