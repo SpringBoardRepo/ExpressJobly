@@ -91,8 +91,8 @@ router.patch('/:id', ensureAdmin, async (req, res, next) => {
             throw new BadRequestError(errs);
         }
 
-        const jobs = await Job.update(req.params.id, req.body);
-        return res.json({ job });
+        const job = await Job.update(req.params.id, req.body);
+        return res.json({ job: job });
 
     } catch (error) {
         return next(error);

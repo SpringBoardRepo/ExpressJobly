@@ -156,7 +156,7 @@ describe('Update a job', function () {
                 title: 'newJob',
                 salary: 10000,
                 equity: '0',
-                company_handle: 'c1'
+                companyHandle: 'c1'
             }
         })
     })

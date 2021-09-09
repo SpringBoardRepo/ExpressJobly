@@ -43,6 +43,21 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
   }
 });
 
+/*** Post  allows user to apply for a job
+ * 
+ * Retruns {applied : jobId}
+ */
+
+router.post('/:username/jobs/:id', async function (req, res, next) {
+
+  try {
+    const jobid = +req.query.id;
+    const appliedJobs = await User.applyToJob(req.query.username, jobid);
+    return res.json({ applied: jobid });
+  } catch (error) {
+    next(error);
+  }
+})
 
 /** GET / => { users: [ {username, firstName, lastName, email }, ... ] }
  *
